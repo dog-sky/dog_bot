@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option go_package = "github.com/dog-sky/dog_bot/internal/app/interact";
+
+package interact;
+
+service Dog {
+  rpc SetWalk (SetWalkRequest) returns (SetWalkReply);
+}
+
+enum DogAction {
+  UNKNOWN_DOG_ACTION = 0;
+  POPIS = 1;
+  WALK = 2;
+}
+
+message SetWalkRequest {
+  DogAction action = 1 [json_name = "action"];
+}
+
+message SetWalkReply {
+  message Result {
+    bool created = 1;
+  }
+  Result result = 1;
+}
