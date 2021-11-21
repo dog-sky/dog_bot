@@ -24,9 +24,7 @@ type App struct {
 
 func New(ctx context.Context, cfg *config.Config) *App {
 	s := grpc.NewServer()
-
 	dbService := db.New()
-
 	interactSerivice := interact.New(dbService)
 
 	interactDesc.RegisterDogServer(s, interactSerivice)

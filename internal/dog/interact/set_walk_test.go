@@ -2,16 +2,20 @@ package interact
 
 import (
 	"context"
-	"reflect"
 	"testing"
 
+	"github.com/dog-sky/dog_bot/internal/dog/mocks"
+
 	desc "github.com/dog-sky/dog_bot/pkg/dog/api"
+
+	"github.com/gojuno/minimock/v3"
+	"github.com/stretchr/testify/assert"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func TestImplementation_SetWalk(t *testing.T) {
-	t.Parallel()
-
-	mockImp := new(Implementation) // научиться мокать
+	mc := minimock.NewController(t)
 
 	type args struct {
 		ctx context.Context
@@ -19,19 +23,52 @@ func TestImplementation_SetWalk(t *testing.T) {
 	}
 	tests := []struct {
 		name    string
-		i       *Implementation
-		args    args
-		want    *desc.SetWalkReply
-		wantErr bool
+		init    func() *Implementation
+
+		args func(t *testing.T) args
+
+		want      *desc.SetWalkReply
+		wantErr    bool
+		inspectErr func(err error, t *testing.T)
 	}{
 		{
-			name: "popis",
-			i:    mockImp,
-			args: args{
-				context.TODO(),
-				&desc.SetWalkRequest{
-					Action: desc.DogAction_POPIS,
-				},
+			name: "Unknown action",
+			init: func() *Implementation {
+				db := mocks.NewDBMock(mc)
+
+				return New(db)
+			},
+			args: func(t *testing.T) args {
+				return args{
+					context.Background(),
+					&desc.SetWalkRequest{
+						Action: desc.DogAction_UNKNOWN_DOG_ACTION,
+					},
+				}
+			},
+			want: nil,
+			wantErr: true,
+			inspectErr: func(err error, t *testing.T) {
+				st, _ := status.FromError(err)
+
+				assert.Equal(t, codes.InvalidArgument, st.Code())
+			},
+		},
+		{
+			name: "popis action",
+			init: func() *Implementation {
+				db := mocks.NewDBMock(mc)
+				db.SetStatusMock.Expect(desc.DogAction_POPIS.String()).Return(nil)
+
+				return New(db)
+			},
+			args: func(t *testing.T) args {
+				return args{
+					context.Background(),
+					&desc.SetWalkRequest{
+						Action: desc.DogAction_POPIS,
+					},
+				}
 			},
 			want: &desc.SetWalkReply{
 				Result: &desc.SetWalkReply_Result{
@@ -39,32 +76,27 @@ func TestImplementation_SetWalk(t *testing.T) {
 				},
 			},
 			wantErr: false,
-		},
-		{
-			name: "error",
-			i:    mockImp,
-			args: args{
-				context.TODO(),
-				&desc.SetWalkRequest{
-					Action: desc.DogAction_UNKNOWN_DOG_ACTION,
-				},
+			inspectErr: func(err error, t *testing.T) {
+				assert.NoError(t, err)
 			},
-			want:    nil,
-			wantErr: true,
 		},
 	}
 
 	for _, tt := range tests {
-		tt := tt
-
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := tt.i.SetWalk(tt.args.ctx, tt.args.in)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("Implementation.SetWalk() error = %v, wantErr %v", err, tt.wantErr)
-				return
+			tArgs := tt.args(t)
+
+			receiver := tt.init()
+			got, err := receiver.SetWalk(tArgs.ctx, tArgs.in)
+
+			assert.Equal(t, got, tt.want)
+
+			if tt.wantErr {
+				assert.Error(t, err)
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("Implementation.SetWalk() = %v, want %v", got, tt.want)
+
+			if tt.inspectErr != nil {
+				tt.inspectErr(err, t)
 			}
 		})
 	}
