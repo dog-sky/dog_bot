@@ -21,6 +21,12 @@ type DBMock struct {
 	afterSetStatusCounter  uint64
 	beforeSetStatusCounter uint64
 	SetStatusMock          mDBMockSetStatus
+
+	funcShutDown          func()
+	inspectFuncShutDown   func()
+	afterShutDownCounter  uint64
+	beforeShutDownCounter uint64
+	ShutDownMock          mDBMockShutDown
 }
 
 // NewDBMock returns a mock for DB
@@ -32,6 +38,8 @@ func NewDBMock(t minimock.Tester) *DBMock {
 
 	m.SetStatusMock = mDBMockSetStatus{mock: m}
 	m.SetStatusMock.callArgs = []*DBMockSetStatusParams{}
+
+	m.ShutDownMock = mDBMockShutDown{mock: m}
 
 	return m
 }
@@ -251,10 +259,147 @@ func (m *DBMock) MinimockSetStatusInspect() {
 	}
 }
 
+type mDBMockShutDown struct {
+	mock               *DBMock
+	defaultExpectation *DBMockShutDownExpectation
+	expectations       []*DBMockShutDownExpectation
+}
+
+// DBMockShutDownExpectation specifies expectation struct of the DB.ShutDown
+type DBMockShutDownExpectation struct {
+	mock *DBMock
+
+	Counter uint64
+}
+
+// Expect sets up expected params for DB.ShutDown
+func (mmShutDown *mDBMockShutDown) Expect() *mDBMockShutDown {
+	if mmShutDown.mock.funcShutDown != nil {
+		mmShutDown.mock.t.Fatalf("DBMock.ShutDown mock is already set by Set")
+	}
+
+	if mmShutDown.defaultExpectation == nil {
+		mmShutDown.defaultExpectation = &DBMockShutDownExpectation{}
+	}
+
+	return mmShutDown
+}
+
+// Inspect accepts an inspector function that has same arguments as the DB.ShutDown
+func (mmShutDown *mDBMockShutDown) Inspect(f func()) *mDBMockShutDown {
+	if mmShutDown.mock.inspectFuncShutDown != nil {
+		mmShutDown.mock.t.Fatalf("Inspect function is already set for DBMock.ShutDown")
+	}
+
+	mmShutDown.mock.inspectFuncShutDown = f
+
+	return mmShutDown
+}
+
+// Return sets up results that will be returned by DB.ShutDown
+func (mmShutDown *mDBMockShutDown) Return() *DBMock {
+	if mmShutDown.mock.funcShutDown != nil {
+		mmShutDown.mock.t.Fatalf("DBMock.ShutDown mock is already set by Set")
+	}
+
+	if mmShutDown.defaultExpectation == nil {
+		mmShutDown.defaultExpectation = &DBMockShutDownExpectation{mock: mmShutDown.mock}
+	}
+
+	return mmShutDown.mock
+}
+
+//Set uses given function f to mock the DB.ShutDown method
+func (mmShutDown *mDBMockShutDown) Set(f func()) *DBMock {
+	if mmShutDown.defaultExpectation != nil {
+		mmShutDown.mock.t.Fatalf("Default expectation is already set for the DB.ShutDown method")
+	}
+
+	if len(mmShutDown.expectations) > 0 {
+		mmShutDown.mock.t.Fatalf("Some expectations are already set for the DB.ShutDown method")
+	}
+
+	mmShutDown.mock.funcShutDown = f
+	return mmShutDown.mock
+}
+
+// ShutDown implements DB
+func (mmShutDown *DBMock) ShutDown() {
+	mm_atomic.AddUint64(&mmShutDown.beforeShutDownCounter, 1)
+	defer mm_atomic.AddUint64(&mmShutDown.afterShutDownCounter, 1)
+
+	if mmShutDown.inspectFuncShutDown != nil {
+		mmShutDown.inspectFuncShutDown()
+	}
+
+	if mmShutDown.ShutDownMock.defaultExpectation != nil {
+		mm_atomic.AddUint64(&mmShutDown.ShutDownMock.defaultExpectation.Counter, 1)
+
+		return
+
+	}
+	if mmShutDown.funcShutDown != nil {
+		mmShutDown.funcShutDown()
+		return
+	}
+	mmShutDown.t.Fatalf("Unexpected call to DBMock.ShutDown.")
+
+}
+
+// ShutDownAfterCounter returns a count of finished DBMock.ShutDown invocations
+func (mmShutDown *DBMock) ShutDownAfterCounter() uint64 {
+	return mm_atomic.LoadUint64(&mmShutDown.afterShutDownCounter)
+}
+
+// ShutDownBeforeCounter returns a count of DBMock.ShutDown invocations
+func (mmShutDown *DBMock) ShutDownBeforeCounter() uint64 {
+	return mm_atomic.LoadUint64(&mmShutDown.beforeShutDownCounter)
+}
+
+// MinimockShutDownDone returns true if the count of the ShutDown invocations corresponds
+// the number of defined expectations
+func (m *DBMock) MinimockShutDownDone() bool {
+	for _, e := range m.ShutDownMock.expectations {
+		if mm_atomic.LoadUint64(&e.Counter) < 1 {
+			return false
+		}
+	}
+
+	// if default expectation was set then invocations count should be greater than zero
+	if m.ShutDownMock.defaultExpectation != nil && mm_atomic.LoadUint64(&m.afterShutDownCounter) < 1 {
+		return false
+	}
+	// if func was set then invocations count should be greater than zero
+	if m.funcShutDown != nil && mm_atomic.LoadUint64(&m.afterShutDownCounter) < 1 {
+		return false
+	}
+	return true
+}
+
+// MinimockShutDownInspect logs each unmet expectation
+func (m *DBMock) MinimockShutDownInspect() {
+	for _, e := range m.ShutDownMock.expectations {
+		if mm_atomic.LoadUint64(&e.Counter) < 1 {
+			m.t.Error("Expected call to DBMock.ShutDown")
+		}
+	}
+
+	// if default expectation was set then invocations count should be greater than zero
+	if m.ShutDownMock.defaultExpectation != nil && mm_atomic.LoadUint64(&m.afterShutDownCounter) < 1 {
+		m.t.Error("Expected call to DBMock.ShutDown")
+	}
+	// if func was set then invocations count should be greater than zero
+	if m.funcShutDown != nil && mm_atomic.LoadUint64(&m.afterShutDownCounter) < 1 {
+		m.t.Error("Expected call to DBMock.ShutDown")
+	}
+}
+
 // MinimockFinish checks that all mocked methods have been called the expected number of times
 func (m *DBMock) MinimockFinish() {
 	if !m.minimockDone() {
 		m.MinimockSetStatusInspect()
+
+		m.MinimockShutDownInspect()
 		m.t.FailNow()
 	}
 }
@@ -278,5 +423,6 @@ func (m *DBMock) MinimockWait(timeout mm_time.Duration) {
 func (m *DBMock) minimockDone() bool {
 	done := true
 	return done &&
-		m.MinimockSetStatusDone()
+		m.MinimockSetStatusDone() &&
+		m.MinimockShutDownDone()
 }

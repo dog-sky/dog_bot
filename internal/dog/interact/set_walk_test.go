@@ -32,7 +32,7 @@ func TestImplementation_SetWalk(t *testing.T) {
 		inspectErr func(err error, t *testing.T)
 	}{
 		{
-			name: "Unknown action",
+			name: "unknown action",
 			init: func() *Implementation {
 				db := mocks.NewDBMock(mc)
 
@@ -67,6 +67,32 @@ func TestImplementation_SetWalk(t *testing.T) {
 					context.Background(),
 					&desc.SetWalkRequest{
 						Action: desc.DogAction_POPIS,
+					},
+				}
+			},
+			want: &desc.SetWalkReply{
+				Result: &desc.SetWalkReply_Result{
+					Created: true,
+				},
+			},
+			wantErr: false,
+			inspectErr: func(err error, t *testing.T) {
+				assert.NoError(t, err)
+			},
+		},
+		{
+			name: "walk action",
+			init: func() *Implementation {
+				db := mocks.NewDBMock(mc)
+				db.SetStatusMock.Expect(desc.DogAction_WALK.String()).Return(nil)
+
+				return New(db)
+			},
+			args: func(t *testing.T) args {
+				return args{
+					context.Background(),
+					&desc.SetWalkRequest{
+						Action: desc.DogAction_WALK,
 					},
 				}
 			},

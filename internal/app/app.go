@@ -22,18 +22,22 @@ type App struct {
 	s  *grpc.Server
 }
 
-func New(ctx context.Context, cfg *config.Config) *App {
+func New(ctx context.Context, cfg *config.Config) (*App, error) {
 	s := grpc.NewServer()
-	dbService := db.New()
-	interactSerivice := interact.New(dbService)
 
+	dbService, err := db.New(ctx, cfg.DbURL)
+	if err != nil {
+		return nil, err
+	}
+
+	interactSerivice := interact.New(dbService)
 	interactDesc.RegisterDogServer(s, interactSerivice)
 
 	return &App{
 		ctx: ctx,
 		cfg: cfg,
 		s:   s,
-	}
+	}, nil
 }
 
 func (a *App) Serve() error {
@@ -49,8 +53,9 @@ func (a *App) Serve() error {
 	return a.s.Serve(lis)
 }
 
-func (a *App) ShutDown() error {
-	a.s.GracefulStop()
+func (a *App) ShutDown() {
+	log.Println("shutting down")
 
-	return nil
+	a.s.GracefulStop()
+	a.db.ShutDown()
 }

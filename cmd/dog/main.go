@@ -22,6 +22,12 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
+	g, ctx := errgroup.WithContext(ctx)
+	service, err := app.New(ctx, cfg)
+	if err != nil {
+		log.Fatalf("err creating servise: %s", err.Error())
+	}
+
 	go func() {
 		c := make(chan os.Signal, 1)
 		signal.Notify(c, os.Interrupt, syscall.SIGTERM)
@@ -30,13 +36,10 @@ func main() {
 		cancel()
 	}()
 
-	g, gCtx := errgroup.WithContext(ctx)
-	service := app.New(ctx, cfg)
-
-	g.Go(func() error {
-		<-gCtx.Done()
-		return service.ShutDown()
-	})
+	go func() {
+		<-ctx.Done()
+		service.ShutDown()
+	}()
 
 	g.Go(func() error {
 		return service.Serve()
@@ -45,6 +48,4 @@ func main() {
 	if err := g.Wait(); err != nil {
 		log.Printf("exit reason: %s \n", err)
 	}
-
-	log.Println("shutdown signal")
 }
