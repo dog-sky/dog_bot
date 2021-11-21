@@ -11,7 +11,7 @@ import (
 func TestImplementation_SetWalk(t *testing.T) {
 	t.Parallel()
 
-	mockImp := new(Implementation)
+	mockImp := new(Implementation) // научиться мокать
 
 	type args struct {
 		ctx context.Context

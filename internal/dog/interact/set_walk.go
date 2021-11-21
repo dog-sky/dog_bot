@@ -14,6 +14,10 @@ func (i *Implementation) SetWalk(ctx context.Context, in *desc.SetWalkRequest) (
 		return nil, status.Error(codes.InvalidArgument, "unknown dog action")
 	}
 
+	if err := i.db.SetStatus(in.Action.String()); err != nil {
+		return nil, status.Error(codes.Internal, "can't set action")
+	}
+
 	return &desc.SetWalkReply{
 		Result: &desc.SetWalkReply_Result{
 			Created: true,

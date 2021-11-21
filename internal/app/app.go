@@ -7,6 +7,9 @@ import (
 
 	"github.com/dog-sky/dog_bot/internal/config"
 	"github.com/dog-sky/dog_bot/internal/dog/interact"
+	"github.com/dog-sky/dog_bot/internal/service/db"
+
+	interactDesc "github.com/dog-sky/dog_bot/pkg/dog/api"
 
 	"google.golang.org/grpc"
 )
@@ -14,13 +17,19 @@ import (
 type App struct {
 	ctx context.Context
 	cfg *config.Config
-	s   *grpc.Server
+
+	db db.DB
+	s  *grpc.Server
 }
 
 func New(ctx context.Context, cfg *config.Config) *App {
 	s := grpc.NewServer()
 
-	interact.New(s)
+	dbService := db.New()
+
+	interactSerivice := interact.New(dbService)
+
+	interactDesc.RegisterDogServer(s, interactSerivice)
 
 	return &App{
 		ctx: ctx,
