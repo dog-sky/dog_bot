@@ -9,6 +9,7 @@ import (
 
 	"github.com/dog-sky/dog_bot/internal/app"
 	"github.com/dog-sky/dog_bot/internal/config"
+
 	"golang.org/x/sync/errgroup"
 
 	_ "github.com/joho/godotenv/autoload"

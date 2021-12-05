@@ -20,6 +20,8 @@ type App struct {
 
 	db db.DB
 	s  *grpc.Server
+
+	shutDownFns []func()
 }
 
 func New(ctx context.Context, cfg *config.Config) (*App, error) {
@@ -33,10 +35,16 @@ func New(ctx context.Context, cfg *config.Config) (*App, error) {
 	interactSerivice := interact.New(dbService)
 	interactDesc.RegisterDogServer(s, interactSerivice)
 
+	shutDownFns := []func(){
+		s.GracefulStop,
+		dbService.ShutDown,
+	}
+
 	return &App{
-		ctx: ctx,
-		cfg: cfg,
-		s:   s,
+		ctx:         ctx,
+		cfg:         cfg,
+		s:           s,
+		shutDownFns: shutDownFns,
 	}, nil
 }
 
@@ -56,6 +64,7 @@ func (a *App) Serve() error {
 func (a *App) ShutDown() {
 	log.Println("shutting down")
 
-	a.s.GracefulStop()
-	a.db.ShutDown()
+	for _, fn := range a.shutDownFns {
+		fn()
+	}
 }

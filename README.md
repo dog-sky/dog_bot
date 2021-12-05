@@ -1,11 +1,6 @@
 # dog_bot
 Dog tracking bot
 
-generate proto
-```
-protoc --go_out=./pkg/dog --go_opt=paths=source_relative --go-grpc_out=./pkg/dog --go-grpc_opt=paths=source_relative ./api/dog.proto
-```
-
 генерация моков в директории с файлом, который надо мокнуть
 ```
 minimock -i DB

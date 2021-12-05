@@ -22,12 +22,12 @@ func TestImplementation_SetWalk(t *testing.T) {
 		in  *desc.SetWalkRequest
 	}
 	tests := []struct {
-		name    string
-		init    func() *Implementation
+		name string
+		init func() *Implementation
 
 		args func(t *testing.T) args
 
-		want      *desc.SetWalkReply
+		want       *desc.SetWalkReply
 		wantErr    bool
 		inspectErr func(err error, t *testing.T)
 	}{
@@ -46,7 +46,7 @@ func TestImplementation_SetWalk(t *testing.T) {
 					},
 				}
 			},
-			want: nil,
+			want:    nil,
 			wantErr: true,
 			inspectErr: func(err error, t *testing.T) {
 				st, _ := status.FromError(err)

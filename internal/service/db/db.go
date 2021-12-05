@@ -12,7 +12,7 @@ type DB interface {
 	ShutDown()
 }
 
-type db struct{
+type db struct {
 	pool *pgxpool.Pool
 }
 

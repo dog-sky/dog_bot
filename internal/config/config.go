@@ -4,7 +4,7 @@ import "github.com/kelseyhightower/envconfig"
 
 type Config struct {
 	AppPort string `envconfig:"APP_PORT" required:"true"`
-	DbURL string `envconfig:"DB_URL" required:"true"`
+	DbURL   string `envconfig:"DB_URL" required:"true"`
 }
 
 func NewConfig() (*Config, error) {
