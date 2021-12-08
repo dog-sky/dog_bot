@@ -10,3 +10,9 @@ test:
 run:
 	go run cmd/dog/main.go
 
+# generates mocks
+.PHONY: generate-mocks
+generate-mocks:
+	find . -name '*_minimock.go' -delete
+	go generate ./...
+	go mod tidy -compat=1.17

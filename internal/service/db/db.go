@@ -1,5 +1,9 @@
 package db
 
+//go:generate mkdir -p mocks
+//go:generate rm -rf ./mocks/*_minimock.go
+//go:generate minimock -i DB -o ./mocks/ -s "_minimock.go"
+
 import (
 	"context"
 

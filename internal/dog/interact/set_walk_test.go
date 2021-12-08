@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/dog-sky/dog_bot/internal/dog/mocks"
+	"github.com/dog-sky/dog_bot/internal/service/db/mocks"
 
 	desc "github.com/dog-sky/dog_bot/pkg/dog/api"
 
