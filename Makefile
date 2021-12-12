@@ -16,3 +16,11 @@ generate-mocks:
 	find . -name '*_minimock.go' -delete
 	go generate ./...
 	go mod tidy -compat=1.17
+
+.PHONY: migrate-status
+migrate-status:
+	goose -dir migrations postgres "user=postgres password=postgres dbname=postgres sslmode=disable" status
+
+.PHONY: migrate
+migrate:
+	goose -dir migrations postgres "user=postgres password=postgres dbname=postgres sslmode=disable" up

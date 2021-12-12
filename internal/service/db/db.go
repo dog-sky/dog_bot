@@ -11,7 +11,7 @@ import (
 )
 
 type DB interface {
-	SetStatus(status string) error
+	SetStatus(ctx context.Context, status string) error
 
 	ShutDown()
 }
@@ -35,7 +35,6 @@ func (d *db) ShutDown() {
 	d.pool.Close()
 }
 
-func (d *db) SetStatus(status string) error {
-	// TODO сделать запрос и положить данные в базу
-	return nil
+func (d *db) SetStatus(ctx context.Context, status string) error {
+	return d.setStatusQuery(ctx, status)
 }

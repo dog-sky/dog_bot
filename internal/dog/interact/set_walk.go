@@ -2,6 +2,7 @@ package interact
 
 import (
 	"context"
+	"fmt"
 
 	desc "github.com/dog-sky/dog_bot/pkg/dog/api"
 
@@ -14,8 +15,9 @@ func (i *Implementation) SetWalk(ctx context.Context, in *desc.SetWalkRequest) (
 		return nil, status.Error(codes.InvalidArgument, "unknown dog action")
 	}
 
-	if err := i.db.SetStatus(in.Action.String()); err != nil {
-		return nil, status.Error(codes.Internal, "can't set action")
+	err := i.db.SetStatus(ctx, in.Action.String())
+	if err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("can't set action: %s", err.Error()))
 	}
 
 	return &desc.SetWalkReply{

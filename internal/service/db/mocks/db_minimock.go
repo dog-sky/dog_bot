@@ -5,6 +5,7 @@ package mocks
 //go:generate minimock -i github.com/dog-sky/dog_bot/internal/service/db.DB -o ./mocks/db_minimock.go -n DBMock
 
 import (
+	"context"
 	"sync"
 	mm_atomic "sync/atomic"
 	mm_time "time"
@@ -16,8 +17,8 @@ import (
 type DBMock struct {
 	t minimock.Tester
 
-	funcSetStatus          func(status string) (err error)
-	inspectFuncSetStatus   func(status string)
+	funcSetStatus          func(ctx context.Context, status string) (err error)
+	inspectFuncSetStatus   func(ctx context.Context, status string)
 	afterSetStatusCounter  uint64
 	beforeSetStatusCounter uint64
 	SetStatusMock          mDBMockSetStatus
@@ -63,6 +64,7 @@ type DBMockSetStatusExpectation struct {
 
 // DBMockSetStatusParams contains parameters of the DB.SetStatus
 type DBMockSetStatusParams struct {
+	ctx    context.Context
 	status string
 }
 
@@ -72,7 +74,7 @@ type DBMockSetStatusResults struct {
 }
 
 // Expect sets up expected params for DB.SetStatus
-func (mmSetStatus *mDBMockSetStatus) Expect(status string) *mDBMockSetStatus {
+func (mmSetStatus *mDBMockSetStatus) Expect(ctx context.Context, status string) *mDBMockSetStatus {
 	if mmSetStatus.mock.funcSetStatus != nil {
 		mmSetStatus.mock.t.Fatalf("DBMock.SetStatus mock is already set by Set")
 	}
@@ -81,7 +83,7 @@ func (mmSetStatus *mDBMockSetStatus) Expect(status string) *mDBMockSetStatus {
 		mmSetStatus.defaultExpectation = &DBMockSetStatusExpectation{}
 	}
 
-	mmSetStatus.defaultExpectation.params = &DBMockSetStatusParams{status}
+	mmSetStatus.defaultExpectation.params = &DBMockSetStatusParams{ctx, status}
 	for _, e := range mmSetStatus.expectations {
 		if minimock.Equal(e.params, mmSetStatus.defaultExpectation.params) {
 			mmSetStatus.mock.t.Fatalf("Expectation set by When has same params: %#v", *mmSetStatus.defaultExpectation.params)
@@ -92,7 +94,7 @@ func (mmSetStatus *mDBMockSetStatus) Expect(status string) *mDBMockSetStatus {
 }
 
 // Inspect accepts an inspector function that has same arguments as the DB.SetStatus
-func (mmSetStatus *mDBMockSetStatus) Inspect(f func(status string)) *mDBMockSetStatus {
+func (mmSetStatus *mDBMockSetStatus) Inspect(f func(ctx context.Context, status string)) *mDBMockSetStatus {
 	if mmSetStatus.mock.inspectFuncSetStatus != nil {
 		mmSetStatus.mock.t.Fatalf("Inspect function is already set for DBMock.SetStatus")
 	}
@@ -116,7 +118,7 @@ func (mmSetStatus *mDBMockSetStatus) Return(err error) *DBMock {
 }
 
 //Set uses given function f to mock the DB.SetStatus method
-func (mmSetStatus *mDBMockSetStatus) Set(f func(status string) (err error)) *DBMock {
+func (mmSetStatus *mDBMockSetStatus) Set(f func(ctx context.Context, status string) (err error)) *DBMock {
 	if mmSetStatus.defaultExpectation != nil {
 		mmSetStatus.mock.t.Fatalf("Default expectation is already set for the DB.SetStatus method")
 	}
@@ -131,14 +133,14 @@ func (mmSetStatus *mDBMockSetStatus) Set(f func(status string) (err error)) *DBM
 
 // When sets expectation for the DB.SetStatus which will trigger the result defined by the following
 // Then helper
-func (mmSetStatus *mDBMockSetStatus) When(status string) *DBMockSetStatusExpectation {
+func (mmSetStatus *mDBMockSetStatus) When(ctx context.Context, status string) *DBMockSetStatusExpectation {
 	if mmSetStatus.mock.funcSetStatus != nil {
 		mmSetStatus.mock.t.Fatalf("DBMock.SetStatus mock is already set by Set")
 	}
 
 	expectation := &DBMockSetStatusExpectation{
 		mock:   mmSetStatus.mock,
-		params: &DBMockSetStatusParams{status},
+		params: &DBMockSetStatusParams{ctx, status},
 	}
 	mmSetStatus.expectations = append(mmSetStatus.expectations, expectation)
 	return expectation
@@ -151,15 +153,15 @@ func (e *DBMockSetStatusExpectation) Then(err error) *DBMock {
 }
 
 // SetStatus implements db.DB
-func (mmSetStatus *DBMock) SetStatus(status string) (err error) {
+func (mmSetStatus *DBMock) SetStatus(ctx context.Context, status string) (err error) {
 	mm_atomic.AddUint64(&mmSetStatus.beforeSetStatusCounter, 1)
 	defer mm_atomic.AddUint64(&mmSetStatus.afterSetStatusCounter, 1)
 
 	if mmSetStatus.inspectFuncSetStatus != nil {
-		mmSetStatus.inspectFuncSetStatus(status)
+		mmSetStatus.inspectFuncSetStatus(ctx, status)
 	}
 
-	mm_params := &DBMockSetStatusParams{status}
+	mm_params := &DBMockSetStatusParams{ctx, status}
 
 	// Record call args
 	mmSetStatus.SetStatusMock.mutex.Lock()
@@ -176,7 +178,7 @@ func (mmSetStatus *DBMock) SetStatus(status string) (err error) {
 	if mmSetStatus.SetStatusMock.defaultExpectation != nil {
 		mm_atomic.AddUint64(&mmSetStatus.SetStatusMock.defaultExpectation.Counter, 1)
 		mm_want := mmSetStatus.SetStatusMock.defaultExpectation.params
-		mm_got := DBMockSetStatusParams{status}
+		mm_got := DBMockSetStatusParams{ctx, status}
 		if mm_want != nil && !minimock.Equal(*mm_want, mm_got) {
 			mmSetStatus.t.Errorf("DBMock.SetStatus got unexpected parameters, want: %#v, got: %#v%s\n", *mm_want, mm_got, minimock.Diff(*mm_want, mm_got))
 		}
@@ -188,9 +190,9 @@ func (mmSetStatus *DBMock) SetStatus(status string) (err error) {
 		return (*mm_results).err
 	}
 	if mmSetStatus.funcSetStatus != nil {
-		return mmSetStatus.funcSetStatus(status)
+		return mmSetStatus.funcSetStatus(ctx, status)
 	}
-	mmSetStatus.t.Fatalf("Unexpected call to DBMock.SetStatus. %v", status)
+	mmSetStatus.t.Fatalf("Unexpected call to DBMock.SetStatus. %v %v", ctx, status)
 	return
 }
 

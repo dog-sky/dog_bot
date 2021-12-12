@@ -58,7 +58,7 @@ func TestImplementation_SetWalk(t *testing.T) {
 			name: "popis action",
 			init: func() *Implementation {
 				db := mocks.NewDBMock(mc)
-				db.SetStatusMock.Expect(desc.DogAction_POPIS.String()).Return(nil)
+				db.SetStatusMock.Expect(context.Background(), desc.DogAction_POPIS.String()).Return(nil)
 
 				return New(db)
 			},
@@ -84,7 +84,7 @@ func TestImplementation_SetWalk(t *testing.T) {
 			name: "walk action",
 			init: func() *Implementation {
 				db := mocks.NewDBMock(mc)
-				db.SetStatusMock.Expect(desc.DogAction_WALK.String()).Return(nil)
+				db.SetStatusMock.Expect(context.Background(), desc.DogAction_WALK.String()).Return(nil)
 
 				return New(db)
 			},
