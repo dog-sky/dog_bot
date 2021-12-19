@@ -1,4 +1,8 @@
 # dog_bot
+---
+[![codecov](https://codecov.io/gh/dog-sky/dog_bot/branch/main/graph/badge.svg?token=SADKGY8ORK)](https://codecov.io/gh/dog-sky/dog_bot)
+---
+
 Dog tracking bot
 
 генерация моков
@@ -12,7 +16,6 @@ goose -dir migrations create %migrations-name% sql
 ```
 
 # ToDo
-- компиляция в докере
 - генерацию бинарников в /bin
 - логированием обмазать
 - Сделать доку
