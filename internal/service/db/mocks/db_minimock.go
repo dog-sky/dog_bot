@@ -10,6 +10,8 @@ import (
 	mm_atomic "sync/atomic"
 	mm_time "time"
 
+	"github.com/dog-sky/dog_bot/internal/service/db/models"
+	desc "github.com/dog-sky/dog_bot/pkg/dog/api"
 	"github.com/gojuno/minimock/v3"
 )
 
@@ -28,6 +30,12 @@ type DBMock struct {
 	afterShutDownCounter  uint64
 	beforeShutDownCounter uint64
 	ShutDownMock          mDBMockShutDown
+
+	funcStatusList          func(ctx context.Context, filter *models.Filter) (spa1 []*desc.StatusListReply_Action, err error)
+	inspectFuncStatusList   func(ctx context.Context, filter *models.Filter)
+	afterStatusListCounter  uint64
+	beforeStatusListCounter uint64
+	StatusListMock          mDBMockStatusList
 }
 
 // NewDBMock returns a mock for db.DB
@@ -41,6 +49,9 @@ func NewDBMock(t minimock.Tester) *DBMock {
 	m.SetStatusMock.callArgs = []*DBMockSetStatusParams{}
 
 	m.ShutDownMock = mDBMockShutDown{mock: m}
+
+	m.StatusListMock = mDBMockStatusList{mock: m}
+	m.StatusListMock.callArgs = []*DBMockStatusListParams{}
 
 	return m
 }
@@ -396,12 +407,231 @@ func (m *DBMock) MinimockShutDownInspect() {
 	}
 }
 
+type mDBMockStatusList struct {
+	mock               *DBMock
+	defaultExpectation *DBMockStatusListExpectation
+	expectations       []*DBMockStatusListExpectation
+
+	callArgs []*DBMockStatusListParams
+	mutex    sync.RWMutex
+}
+
+// DBMockStatusListExpectation specifies expectation struct of the DB.StatusList
+type DBMockStatusListExpectation struct {
+	mock    *DBMock
+	params  *DBMockStatusListParams
+	results *DBMockStatusListResults
+	Counter uint64
+}
+
+// DBMockStatusListParams contains parameters of the DB.StatusList
+type DBMockStatusListParams struct {
+	ctx    context.Context
+	filter *models.Filter
+}
+
+// DBMockStatusListResults contains results of the DB.StatusList
+type DBMockStatusListResults struct {
+	spa1 []*desc.StatusListReply_Action
+	err  error
+}
+
+// Expect sets up expected params for DB.StatusList
+func (mmStatusList *mDBMockStatusList) Expect(ctx context.Context, filter *models.Filter) *mDBMockStatusList {
+	if mmStatusList.mock.funcStatusList != nil {
+		mmStatusList.mock.t.Fatalf("DBMock.StatusList mock is already set by Set")
+	}
+
+	if mmStatusList.defaultExpectation == nil {
+		mmStatusList.defaultExpectation = &DBMockStatusListExpectation{}
+	}
+
+	mmStatusList.defaultExpectation.params = &DBMockStatusListParams{ctx, filter}
+	for _, e := range mmStatusList.expectations {
+		if minimock.Equal(e.params, mmStatusList.defaultExpectation.params) {
+			mmStatusList.mock.t.Fatalf("Expectation set by When has same params: %#v", *mmStatusList.defaultExpectation.params)
+		}
+	}
+
+	return mmStatusList
+}
+
+// Inspect accepts an inspector function that has same arguments as the DB.StatusList
+func (mmStatusList *mDBMockStatusList) Inspect(f func(ctx context.Context, filter *models.Filter)) *mDBMockStatusList {
+	if mmStatusList.mock.inspectFuncStatusList != nil {
+		mmStatusList.mock.t.Fatalf("Inspect function is already set for DBMock.StatusList")
+	}
+
+	mmStatusList.mock.inspectFuncStatusList = f
+
+	return mmStatusList
+}
+
+// Return sets up results that will be returned by DB.StatusList
+func (mmStatusList *mDBMockStatusList) Return(spa1 []*desc.StatusListReply_Action, err error) *DBMock {
+	if mmStatusList.mock.funcStatusList != nil {
+		mmStatusList.mock.t.Fatalf("DBMock.StatusList mock is already set by Set")
+	}
+
+	if mmStatusList.defaultExpectation == nil {
+		mmStatusList.defaultExpectation = &DBMockStatusListExpectation{mock: mmStatusList.mock}
+	}
+	mmStatusList.defaultExpectation.results = &DBMockStatusListResults{spa1, err}
+	return mmStatusList.mock
+}
+
+//Set uses given function f to mock the DB.StatusList method
+func (mmStatusList *mDBMockStatusList) Set(f func(ctx context.Context, filter *models.Filter) (spa1 []*desc.StatusListReply_Action, err error)) *DBMock {
+	if mmStatusList.defaultExpectation != nil {
+		mmStatusList.mock.t.Fatalf("Default expectation is already set for the DB.StatusList method")
+	}
+
+	if len(mmStatusList.expectations) > 0 {
+		mmStatusList.mock.t.Fatalf("Some expectations are already set for the DB.StatusList method")
+	}
+
+	mmStatusList.mock.funcStatusList = f
+	return mmStatusList.mock
+}
+
+// When sets expectation for the DB.StatusList which will trigger the result defined by the following
+// Then helper
+func (mmStatusList *mDBMockStatusList) When(ctx context.Context, filter *models.Filter) *DBMockStatusListExpectation {
+	if mmStatusList.mock.funcStatusList != nil {
+		mmStatusList.mock.t.Fatalf("DBMock.StatusList mock is already set by Set")
+	}
+
+	expectation := &DBMockStatusListExpectation{
+		mock:   mmStatusList.mock,
+		params: &DBMockStatusListParams{ctx, filter},
+	}
+	mmStatusList.expectations = append(mmStatusList.expectations, expectation)
+	return expectation
+}
+
+// Then sets up DB.StatusList return parameters for the expectation previously defined by the When method
+func (e *DBMockStatusListExpectation) Then(spa1 []*desc.StatusListReply_Action, err error) *DBMock {
+	e.results = &DBMockStatusListResults{spa1, err}
+	return e.mock
+}
+
+// StatusList implements db.DB
+func (mmStatusList *DBMock) StatusList(ctx context.Context, filter *models.Filter) (spa1 []*desc.StatusListReply_Action, err error) {
+	mm_atomic.AddUint64(&mmStatusList.beforeStatusListCounter, 1)
+	defer mm_atomic.AddUint64(&mmStatusList.afterStatusListCounter, 1)
+
+	if mmStatusList.inspectFuncStatusList != nil {
+		mmStatusList.inspectFuncStatusList(ctx, filter)
+	}
+
+	mm_params := &DBMockStatusListParams{ctx, filter}
+
+	// Record call args
+	mmStatusList.StatusListMock.mutex.Lock()
+	mmStatusList.StatusListMock.callArgs = append(mmStatusList.StatusListMock.callArgs, mm_params)
+	mmStatusList.StatusListMock.mutex.Unlock()
+
+	for _, e := range mmStatusList.StatusListMock.expectations {
+		if minimock.Equal(e.params, mm_params) {
+			mm_atomic.AddUint64(&e.Counter, 1)
+			return e.results.spa1, e.results.err
+		}
+	}
+
+	if mmStatusList.StatusListMock.defaultExpectation != nil {
+		mm_atomic.AddUint64(&mmStatusList.StatusListMock.defaultExpectation.Counter, 1)
+		mm_want := mmStatusList.StatusListMock.defaultExpectation.params
+		mm_got := DBMockStatusListParams{ctx, filter}
+		if mm_want != nil && !minimock.Equal(*mm_want, mm_got) {
+			mmStatusList.t.Errorf("DBMock.StatusList got unexpected parameters, want: %#v, got: %#v%s\n", *mm_want, mm_got, minimock.Diff(*mm_want, mm_got))
+		}
+
+		mm_results := mmStatusList.StatusListMock.defaultExpectation.results
+		if mm_results == nil {
+			mmStatusList.t.Fatal("No results are set for the DBMock.StatusList")
+		}
+		return (*mm_results).spa1, (*mm_results).err
+	}
+	if mmStatusList.funcStatusList != nil {
+		return mmStatusList.funcStatusList(ctx, filter)
+	}
+	mmStatusList.t.Fatalf("Unexpected call to DBMock.StatusList. %v %v", ctx, filter)
+	return
+}
+
+// StatusListAfterCounter returns a count of finished DBMock.StatusList invocations
+func (mmStatusList *DBMock) StatusListAfterCounter() uint64 {
+	return mm_atomic.LoadUint64(&mmStatusList.afterStatusListCounter)
+}
+
+// StatusListBeforeCounter returns a count of DBMock.StatusList invocations
+func (mmStatusList *DBMock) StatusListBeforeCounter() uint64 {
+	return mm_atomic.LoadUint64(&mmStatusList.beforeStatusListCounter)
+}
+
+// Calls returns a list of arguments used in each call to DBMock.StatusList.
+// The list is in the same order as the calls were made (i.e. recent calls have a higher index)
+func (mmStatusList *mDBMockStatusList) Calls() []*DBMockStatusListParams {
+	mmStatusList.mutex.RLock()
+
+	argCopy := make([]*DBMockStatusListParams, len(mmStatusList.callArgs))
+	copy(argCopy, mmStatusList.callArgs)
+
+	mmStatusList.mutex.RUnlock()
+
+	return argCopy
+}
+
+// MinimockStatusListDone returns true if the count of the StatusList invocations corresponds
+// the number of defined expectations
+func (m *DBMock) MinimockStatusListDone() bool {
+	for _, e := range m.StatusListMock.expectations {
+		if mm_atomic.LoadUint64(&e.Counter) < 1 {
+			return false
+		}
+	}
+
+	// if default expectation was set then invocations count should be greater than zero
+	if m.StatusListMock.defaultExpectation != nil && mm_atomic.LoadUint64(&m.afterStatusListCounter) < 1 {
+		return false
+	}
+	// if func was set then invocations count should be greater than zero
+	if m.funcStatusList != nil && mm_atomic.LoadUint64(&m.afterStatusListCounter) < 1 {
+		return false
+	}
+	return true
+}
+
+// MinimockStatusListInspect logs each unmet expectation
+func (m *DBMock) MinimockStatusListInspect() {
+	for _, e := range m.StatusListMock.expectations {
+		if mm_atomic.LoadUint64(&e.Counter) < 1 {
+			m.t.Errorf("Expected call to DBMock.StatusList with params: %#v", *e.params)
+		}
+	}
+
+	// if default expectation was set then invocations count should be greater than zero
+	if m.StatusListMock.defaultExpectation != nil && mm_atomic.LoadUint64(&m.afterStatusListCounter) < 1 {
+		if m.StatusListMock.defaultExpectation.params == nil {
+			m.t.Error("Expected call to DBMock.StatusList")
+		} else {
+			m.t.Errorf("Expected call to DBMock.StatusList with params: %#v", *m.StatusListMock.defaultExpectation.params)
+		}
+	}
+	// if func was set then invocations count should be greater than zero
+	if m.funcStatusList != nil && mm_atomic.LoadUint64(&m.afterStatusListCounter) < 1 {
+		m.t.Error("Expected call to DBMock.StatusList")
+	}
+}
+
 // MinimockFinish checks that all mocked methods have been called the expected number of times
 func (m *DBMock) MinimockFinish() {
 	if !m.minimockDone() {
 		m.MinimockSetStatusInspect()
 
 		m.MinimockShutDownInspect()
+
+		m.MinimockStatusListInspect()
 		m.t.FailNow()
 	}
 }
@@ -426,5 +656,6 @@ func (m *DBMock) minimockDone() bool {
 	done := true
 	return done &&
 		m.MinimockSetStatusDone() &&
-		m.MinimockShutDownDone()
+		m.MinimockShutDownDone() &&
+		m.MinimockStatusListDone()
 }
