@@ -7,11 +7,14 @@ package db
 import (
 	"context"
 
+	"github.com/dog-sky/dog_bot/internal/service/db/models"
+	desc "github.com/dog-sky/dog_bot/pkg/dog/api"
 	"github.com/jackc/pgx/v4/pgxpool"
 )
 
 type DB interface {
 	SetStatus(ctx context.Context, status string) error
+	StatusList(ctx context.Context, filter *models.Filter) ([]*desc.StatusListReply_Action, error)
 
 	ShutDown()
 }
@@ -37,4 +40,8 @@ func (d *db) ShutDown() {
 
 func (d *db) SetStatus(ctx context.Context, status string) error {
 	return d.setStatusQuery(ctx, status)
+}
+
+func (d *db) StatusList(ctx context.Context, filter *models.Filter) ([]*desc.StatusListReply_Action, error) {
+	return d.statusListQuery(ctx, filter)
 }

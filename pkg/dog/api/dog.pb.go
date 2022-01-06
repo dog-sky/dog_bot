@@ -9,6 +9,7 @@ package interact
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 )
@@ -69,7 +70,7 @@ func (DogAction) EnumDescriptor() ([]byte, []int) {
 	return file_api_dog_proto_rawDescGZIP(), []int{0}
 }
 
-type SetWalkRequest struct {
+type SetStatusRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -77,8 +78,8 @@ type SetWalkRequest struct {
 	Action DogAction `protobuf:"varint,1,opt,name=action,proto3,enum=interact.DogAction" json:"action,omitempty"`
 }
 
-func (x *SetWalkRequest) Reset() {
-	*x = SetWalkRequest{}
+func (x *SetStatusRequest) Reset() {
+	*x = SetStatusRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_api_dog_proto_msgTypes[0]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -86,13 +87,13 @@ func (x *SetWalkRequest) Reset() {
 	}
 }
 
-func (x *SetWalkRequest) String() string {
+func (x *SetStatusRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SetWalkRequest) ProtoMessage() {}
+func (*SetStatusRequest) ProtoMessage() {}
 
-func (x *SetWalkRequest) ProtoReflect() protoreflect.Message {
+func (x *SetStatusRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_api_dog_proto_msgTypes[0]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -104,28 +105,28 @@ func (x *SetWalkRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SetWalkRequest.ProtoReflect.Descriptor instead.
-func (*SetWalkRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use SetStatusRequest.ProtoReflect.Descriptor instead.
+func (*SetStatusRequest) Descriptor() ([]byte, []int) {
 	return file_api_dog_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *SetWalkRequest) GetAction() DogAction {
+func (x *SetStatusRequest) GetAction() DogAction {
 	if x != nil {
 		return x.Action
 	}
 	return DogAction_UNKNOWN_DOG_ACTION
 }
 
-type SetWalkReply struct {
+type SetStatusReply struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Result *SetWalkReply_Result `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
+	Result *SetStatusReply_Result `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
 }
 
-func (x *SetWalkReply) Reset() {
-	*x = SetWalkReply{}
+func (x *SetStatusReply) Reset() {
+	*x = SetStatusReply{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_api_dog_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -133,13 +134,13 @@ func (x *SetWalkReply) Reset() {
 	}
 }
 
-func (x *SetWalkReply) String() string {
+func (x *SetStatusReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SetWalkReply) ProtoMessage() {}
+func (*SetStatusReply) ProtoMessage() {}
 
-func (x *SetWalkReply) ProtoReflect() protoreflect.Message {
+func (x *SetStatusReply) ProtoReflect() protoreflect.Message {
 	mi := &file_api_dog_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -151,28 +152,28 @@ func (x *SetWalkReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SetWalkReply.ProtoReflect.Descriptor instead.
-func (*SetWalkReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use SetStatusReply.ProtoReflect.Descriptor instead.
+func (*SetStatusReply) Descriptor() ([]byte, []int) {
 	return file_api_dog_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *SetWalkReply) GetResult() *SetWalkReply_Result {
+func (x *SetStatusReply) GetResult() *SetStatusReply_Result {
 	if x != nil {
 		return x.Result
 	}
 	return nil
 }
 
-type SetWalkReply_Result struct {
+type StatusListrequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Created bool `protobuf:"varint,1,opt,name=created,proto3" json:"created,omitempty"`
+	Filter *StatusListrequest_Filter `protobuf:"bytes,1,opt,name=filter,proto3" json:"filter,omitempty"`
 }
 
-func (x *SetWalkReply_Result) Reset() {
-	*x = SetWalkReply_Result{}
+func (x *StatusListrequest) Reset() {
+	*x = StatusListrequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_api_dog_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -180,13 +181,13 @@ func (x *SetWalkReply_Result) Reset() {
 	}
 }
 
-func (x *SetWalkReply_Result) String() string {
+func (x *StatusListrequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SetWalkReply_Result) ProtoMessage() {}
+func (*StatusListrequest) ProtoMessage() {}
 
-func (x *SetWalkReply_Result) ProtoReflect() protoreflect.Message {
+func (x *StatusListrequest) ProtoReflect() protoreflect.Message {
 	mi := &file_api_dog_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -198,45 +199,342 @@ func (x *SetWalkReply_Result) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SetWalkReply_Result.ProtoReflect.Descriptor instead.
-func (*SetWalkReply_Result) Descriptor() ([]byte, []int) {
+// Deprecated: Use StatusListrequest.ProtoReflect.Descriptor instead.
+func (*StatusListrequest) Descriptor() ([]byte, []int) {
+	return file_api_dog_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *StatusListrequest) GetFilter() *StatusListrequest_Filter {
+	if x != nil {
+		return x.Filter
+	}
+	return nil
+}
+
+type StatusListReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Result []*StatusListReply_Action `protobuf:"bytes,1,rep,name=result,proto3" json:"result,omitempty"`
+}
+
+func (x *StatusListReply) Reset() {
+	*x = StatusListReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dog_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StatusListReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusListReply) ProtoMessage() {}
+
+func (x *StatusListReply) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dog_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusListReply.ProtoReflect.Descriptor instead.
+func (*StatusListReply) Descriptor() ([]byte, []int) {
+	return file_api_dog_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *StatusListReply) GetResult() []*StatusListReply_Action {
+	if x != nil {
+		return x.Result
+	}
+	return nil
+}
+
+type SetStatusReply_Result struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Created bool `protobuf:"varint,1,opt,name=created,proto3" json:"created,omitempty"`
+}
+
+func (x *SetStatusReply_Result) Reset() {
+	*x = SetStatusReply_Result{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dog_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *SetStatusReply_Result) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetStatusReply_Result) ProtoMessage() {}
+
+func (x *SetStatusReply_Result) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dog_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetStatusReply_Result.ProtoReflect.Descriptor instead.
+func (*SetStatusReply_Result) Descriptor() ([]byte, []int) {
 	return file_api_dog_proto_rawDescGZIP(), []int{1, 0}
 }
 
-func (x *SetWalkReply_Result) GetCreated() bool {
+func (x *SetStatusReply_Result) GetCreated() bool {
 	if x != nil {
 		return x.Created
 	}
 	return false
 }
 
+type StatusListrequest_Filter struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Date    *StatusListrequest_Filter_Date `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
+	Actions []DogAction                    `protobuf:"varint,2,rep,packed,name=actions,proto3,enum=interact.DogAction" json:"actions,omitempty"`
+}
+
+func (x *StatusListrequest_Filter) Reset() {
+	*x = StatusListrequest_Filter{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dog_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StatusListrequest_Filter) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusListrequest_Filter) ProtoMessage() {}
+
+func (x *StatusListrequest_Filter) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dog_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusListrequest_Filter.ProtoReflect.Descriptor instead.
+func (*StatusListrequest_Filter) Descriptor() ([]byte, []int) {
+	return file_api_dog_proto_rawDescGZIP(), []int{2, 0}
+}
+
+func (x *StatusListrequest_Filter) GetDate() *StatusListrequest_Filter_Date {
+	if x != nil {
+		return x.Date
+	}
+	return nil
+}
+
+func (x *StatusListrequest_Filter) GetActions() []DogAction {
+	if x != nil {
+		return x.Actions
+	}
+	return nil
+}
+
+type StatusListrequest_Filter_Date struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	From *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=from,proto3" json:"from,omitempty"`
+	To   *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=to,proto3" json:"to,omitempty"`
+}
+
+func (x *StatusListrequest_Filter_Date) Reset() {
+	*x = StatusListrequest_Filter_Date{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dog_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StatusListrequest_Filter_Date) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusListrequest_Filter_Date) ProtoMessage() {}
+
+func (x *StatusListrequest_Filter_Date) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dog_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusListrequest_Filter_Date.ProtoReflect.Descriptor instead.
+func (*StatusListrequest_Filter_Date) Descriptor() ([]byte, []int) {
+	return file_api_dog_proto_rawDescGZIP(), []int{2, 0, 0}
+}
+
+func (x *StatusListrequest_Filter_Date) GetFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.From
+	}
+	return nil
+}
+
+func (x *StatusListrequest_Filter_Date) GetTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.To
+	}
+	return nil
+}
+
+type StatusListReply_Action struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Date   *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
+	Action DogAction              `protobuf:"varint,2,opt,name=action,proto3,enum=interact.DogAction" json:"action,omitempty"`
+}
+
+func (x *StatusListReply_Action) Reset() {
+	*x = StatusListReply_Action{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_dog_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *StatusListReply_Action) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StatusListReply_Action) ProtoMessage() {}
+
+func (x *StatusListReply_Action) ProtoReflect() protoreflect.Message {
+	mi := &file_api_dog_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StatusListReply_Action.ProtoReflect.Descriptor instead.
+func (*StatusListReply_Action) Descriptor() ([]byte, []int) {
+	return file_api_dog_proto_rawDescGZIP(), []int{3, 0}
+}
+
+func (x *StatusListReply_Action) GetDate() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Date
+	}
+	return nil
+}
+
+func (x *StatusListReply_Action) GetAction() DogAction {
+	if x != nil {
+		return x.Action
+	}
+	return DogAction_UNKNOWN_DOG_ACTION
+}
+
 var File_api_dog_proto protoreflect.FileDescriptor
 
 var file_api_dog_proto_rawDesc = []byte{
 	0x0a, 0x0d, 0x61, 0x70, 0x69, 0x2f, 0x64, 0x6f, 0x67, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x12,
-	0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x22, 0x3d, 0x0a, 0x0e, 0x53, 0x65, 0x74,
-	0x57, 0x61, 0x6c, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2b, 0x0a, 0x06, 0x61,
-	0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x13, 0x2e, 0x69, 0x6e,
-	0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x44, 0x6f, 0x67, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e,
-	0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x69, 0x0a, 0x0c, 0x53, 0x65, 0x74, 0x57,
-	0x61, 0x6c, 0x6b, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x35, 0x0a, 0x06, 0x72, 0x65, 0x73, 0x75,
-	0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1d, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72,
-	0x61, 0x63, 0x74, 0x2e, 0x53, 0x65, 0x74, 0x57, 0x61, 0x6c, 0x6b, 0x52, 0x65, 0x70, 0x6c, 0x79,
-	0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x1a,
-	0x22, 0x0a, 0x06, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x08, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61,
-	0x74, 0x65, 0x64, 0x2a, 0x38, 0x0a, 0x09, 0x44, 0x6f, 0x67, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e,
-	0x12, 0x16, 0x0a, 0x12, 0x55, 0x4e, 0x4b, 0x4e, 0x4f, 0x57, 0x4e, 0x5f, 0x44, 0x4f, 0x47, 0x5f,
-	0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x10, 0x00, 0x12, 0x09, 0x0a, 0x05, 0x50, 0x4f, 0x50, 0x49,
-	0x53, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04, 0x57, 0x41, 0x4c, 0x4b, 0x10, 0x02, 0x32, 0x42, 0x0a,
-	0x03, 0x44, 0x6f, 0x67, 0x12, 0x3b, 0x0a, 0x07, 0x53, 0x65, 0x74, 0x57, 0x61, 0x6c, 0x6b, 0x12,
-	0x18, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x65, 0x74, 0x57, 0x61,
-	0x6c, 0x6b, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x69, 0x6e, 0x74, 0x65,
-	0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x65, 0x74, 0x57, 0x61, 0x6c, 0x6b, 0x52, 0x65, 0x70, 0x6c,
-	0x79, 0x42, 0x32, 0x5a, 0x30, 0x67, 0x69, 0x74, 0x68, 0x75, 0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f,
-	0x64, 0x6f, 0x67, 0x2d, 0x73, 0x6b, 0x79, 0x2f, 0x64, 0x6f, 0x67, 0x5f, 0x62, 0x6f, 0x74, 0x2f,
-	0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61, 0x70, 0x70, 0x2f, 0x69, 0x6e, 0x74,
-	0x65, 0x72, 0x61, 0x63, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x08, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x1a, 0x1f, 0x67, 0x6f, 0x6f, 0x67, 0x6c,
+	0x65, 0x2f, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2f, 0x74, 0x69, 0x6d, 0x65, 0x73,
+	0x74, 0x61, 0x6d, 0x70, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x22, 0x3f, 0x0a, 0x10, 0x53, 0x65,
+	0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x2b,
+	0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0e, 0x32, 0x13,
+	0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x44, 0x6f, 0x67, 0x41, 0x63, 0x74,
+	0x69, 0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x6d, 0x0a, 0x0e, 0x53,
+	0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x37, 0x0a,
+	0x06, 0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1f, 0x2e,
+	0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x2e, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x52, 0x06,
+	0x72, 0x65, 0x73, 0x75, 0x6c, 0x74, 0x1a, 0x22, 0x0a, 0x06, 0x52, 0x65, 0x73, 0x75, 0x6c, 0x74,
+	0x12, 0x18, 0x0a, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28,
+	0x08, 0x52, 0x07, 0x63, 0x72, 0x65, 0x61, 0x74, 0x65, 0x64, 0x22, 0xaa, 0x02, 0x0a, 0x11, 0x53,
+	0x74, 0x61, 0x74, 0x75, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74,
+	0x12, 0x3a, 0x0a, 0x06, 0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b,
+	0x32, 0x22, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x2e, 0x46, 0x69,
+	0x6c, 0x74, 0x65, 0x72, 0x52, 0x06, 0x66, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x1a, 0xd8, 0x01, 0x0a,
+	0x06, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x12, 0x3b, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x27, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74,
+	0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x72, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x2e, 0x46, 0x69, 0x6c, 0x74, 0x65, 0x72, 0x2e, 0x44, 0x61, 0x74, 0x65, 0x52, 0x04,
+	0x64, 0x61, 0x74, 0x65, 0x12, 0x2d, 0x0a, 0x07, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18,
+	0x02, 0x20, 0x03, 0x28, 0x0e, 0x32, 0x13, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74,
+	0x2e, 0x44, 0x6f, 0x67, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x07, 0x61, 0x63, 0x74, 0x69,
+	0x6f, 0x6e, 0x73, 0x1a, 0x62, 0x0a, 0x04, 0x44, 0x61, 0x74, 0x65, 0x12, 0x2e, 0x0a, 0x04, 0x66,
+	0x72, 0x6f, 0x6d, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67,
+	0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65,
+	0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x04, 0x66, 0x72, 0x6f, 0x6d, 0x12, 0x2a, 0x0a, 0x02, 0x74,
+	0x6f, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e, 0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65,
+	0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e, 0x54, 0x69, 0x6d, 0x65, 0x73, 0x74,
+	0x61, 0x6d, 0x70, 0x52, 0x02, 0x74, 0x6f, 0x22, 0xb2, 0x01, 0x0a, 0x0f, 0x53, 0x74, 0x61, 0x74,
+	0x75, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x38, 0x0a, 0x06, 0x72,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x18, 0x01, 0x20, 0x03, 0x28, 0x0b, 0x32, 0x20, 0x2e, 0x69, 0x6e,
+	0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4c, 0x69, 0x73,
+	0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x2e, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x72,
+	0x65, 0x73, 0x75, 0x6c, 0x74, 0x1a, 0x65, 0x0a, 0x06, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12,
+	0x2e, 0x0a, 0x04, 0x64, 0x61, 0x74, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x1a, 0x2e,
+	0x67, 0x6f, 0x6f, 0x67, 0x6c, 0x65, 0x2e, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x62, 0x75, 0x66, 0x2e,
+	0x54, 0x69, 0x6d, 0x65, 0x73, 0x74, 0x61, 0x6d, 0x70, 0x52, 0x04, 0x64, 0x61, 0x74, 0x65, 0x12,
+	0x2b, 0x0a, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0e, 0x32,
+	0x13, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x44, 0x6f, 0x67, 0x41, 0x63,
+	0x74, 0x69, 0x6f, 0x6e, 0x52, 0x06, 0x61, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x2a, 0x38, 0x0a, 0x09,
+	0x44, 0x6f, 0x67, 0x41, 0x63, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x16, 0x0a, 0x12, 0x55, 0x4e, 0x4b,
+	0x4e, 0x4f, 0x57, 0x4e, 0x5f, 0x44, 0x4f, 0x47, 0x5f, 0x41, 0x43, 0x54, 0x49, 0x4f, 0x4e, 0x10,
+	0x00, 0x12, 0x09, 0x0a, 0x05, 0x50, 0x4f, 0x50, 0x49, 0x53, 0x10, 0x01, 0x12, 0x08, 0x0a, 0x04,
+	0x57, 0x41, 0x4c, 0x4b, 0x10, 0x02, 0x32, 0x8e, 0x01, 0x0a, 0x03, 0x44, 0x6f, 0x67, 0x12, 0x41,
+	0x0a, 0x09, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x1a, 0x2e, 0x69, 0x6e,
+	0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x18, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61,
+	0x63, 0x74, 0x2e, 0x53, 0x65, 0x74, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x52, 0x65, 0x70, 0x6c,
+	0x79, 0x12, 0x44, 0x0a, 0x0a, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4c, 0x69, 0x73, 0x74, 0x12,
+	0x1b, 0x2e, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75,
+	0x73, 0x4c, 0x69, 0x73, 0x74, 0x72, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x19, 0x2e, 0x69,
+	0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x2e, 0x53, 0x74, 0x61, 0x74, 0x75, 0x73, 0x4c, 0x69,
+	0x73, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x42, 0x32, 0x5a, 0x30, 0x67, 0x69, 0x74, 0x68, 0x75,
+	0x62, 0x2e, 0x63, 0x6f, 0x6d, 0x2f, 0x64, 0x6f, 0x67, 0x2d, 0x73, 0x6b, 0x79, 0x2f, 0x64, 0x6f,
+	0x67, 0x5f, 0x62, 0x6f, 0x74, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x6e, 0x61, 0x6c, 0x2f, 0x61,
+	0x70, 0x70, 0x2f, 0x69, 0x6e, 0x74, 0x65, 0x72, 0x61, 0x63, 0x74, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -252,23 +550,39 @@ func file_api_dog_proto_rawDescGZIP() []byte {
 }
 
 var file_api_dog_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_dog_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_api_dog_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_api_dog_proto_goTypes = []interface{}{
-	(DogAction)(0),              // 0: interact.DogAction
-	(*SetWalkRequest)(nil),      // 1: interact.SetWalkRequest
-	(*SetWalkReply)(nil),        // 2: interact.SetWalkReply
-	(*SetWalkReply_Result)(nil), // 3: interact.SetWalkReply.Result
+	(DogAction)(0),                        // 0: interact.DogAction
+	(*SetStatusRequest)(nil),              // 1: interact.SetStatusRequest
+	(*SetStatusReply)(nil),                // 2: interact.SetStatusReply
+	(*StatusListrequest)(nil),             // 3: interact.StatusListrequest
+	(*StatusListReply)(nil),               // 4: interact.StatusListReply
+	(*SetStatusReply_Result)(nil),         // 5: interact.SetStatusReply.Result
+	(*StatusListrequest_Filter)(nil),      // 6: interact.StatusListrequest.Filter
+	(*StatusListrequest_Filter_Date)(nil), // 7: interact.StatusListrequest.Filter.Date
+	(*StatusListReply_Action)(nil),        // 8: interact.StatusListReply.Action
+	(*timestamppb.Timestamp)(nil),         // 9: google.protobuf.Timestamp
 }
 var file_api_dog_proto_depIdxs = []int32{
-	0, // 0: interact.SetWalkRequest.action:type_name -> interact.DogAction
-	3, // 1: interact.SetWalkReply.result:type_name -> interact.SetWalkReply.Result
-	1, // 2: interact.Dog.SetWalk:input_type -> interact.SetWalkRequest
-	2, // 3: interact.Dog.SetWalk:output_type -> interact.SetWalkReply
-	3, // [3:4] is the sub-list for method output_type
-	2, // [2:3] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0,  // 0: interact.SetStatusRequest.action:type_name -> interact.DogAction
+	5,  // 1: interact.SetStatusReply.result:type_name -> interact.SetStatusReply.Result
+	6,  // 2: interact.StatusListrequest.filter:type_name -> interact.StatusListrequest.Filter
+	8,  // 3: interact.StatusListReply.result:type_name -> interact.StatusListReply.Action
+	7,  // 4: interact.StatusListrequest.Filter.date:type_name -> interact.StatusListrequest.Filter.Date
+	0,  // 5: interact.StatusListrequest.Filter.actions:type_name -> interact.DogAction
+	9,  // 6: interact.StatusListrequest.Filter.Date.from:type_name -> google.protobuf.Timestamp
+	9,  // 7: interact.StatusListrequest.Filter.Date.to:type_name -> google.protobuf.Timestamp
+	9,  // 8: interact.StatusListReply.Action.date:type_name -> google.protobuf.Timestamp
+	0,  // 9: interact.StatusListReply.Action.action:type_name -> interact.DogAction
+	1,  // 10: interact.Dog.SetStatus:input_type -> interact.SetStatusRequest
+	3,  // 11: interact.Dog.StatusList:input_type -> interact.StatusListrequest
+	2,  // 12: interact.Dog.SetStatus:output_type -> interact.SetStatusReply
+	4,  // 13: interact.Dog.StatusList:output_type -> interact.StatusListReply
+	12, // [12:14] is the sub-list for method output_type
+	10, // [10:12] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_api_dog_proto_init() }
@@ -278,7 +592,7 @@ func file_api_dog_proto_init() {
 	}
 	if !protoimpl.UnsafeEnabled {
 		file_api_dog_proto_msgTypes[0].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetWalkRequest); i {
+			switch v := v.(*SetStatusRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -290,7 +604,7 @@ func file_api_dog_proto_init() {
 			}
 		}
 		file_api_dog_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetWalkReply); i {
+			switch v := v.(*SetStatusReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -302,7 +616,67 @@ func file_api_dog_proto_init() {
 			}
 		}
 		file_api_dog_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*SetWalkReply_Result); i {
+			switch v := v.(*StatusListrequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dog_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StatusListReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dog_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*SetStatusReply_Result); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dog_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StatusListrequest_Filter); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dog_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StatusListrequest_Filter_Date); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_dog_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*StatusListReply_Action); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -320,7 +694,7 @@ func file_api_dog_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_dog_proto_rawDesc,
 			NumEnums:      1,
-			NumMessages:   3,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

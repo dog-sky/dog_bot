@@ -2,10 +2,14 @@ syntax = "proto3";
 
 option go_package = "github.com/dog-sky/dog_bot/internal/app/interact";
 
+import "google/protobuf/timestamp.proto";
+
 package interact;
 
 service Dog {
-  rpc SetWalk (SetWalkRequest) returns (SetWalkReply);
+  rpc SetStatus (SetStatusRequest) returns (SetStatusReply);
+
+  rpc StatusList (StatusListrequest) returns (StatusListReply);
 }
 
 enum DogAction {
@@ -14,13 +18,34 @@ enum DogAction {
   WALK = 2;
 }
 
-message SetWalkRequest {
+message SetStatusRequest {
   DogAction action = 1 [json_name = "action"];
 }
 
-message SetWalkReply {
+message SetStatusReply {
   message Result {
     bool created = 1;
   }
   Result result = 1;
+}
+
+message StatusListrequest {
+  message Filter {
+    message Date {
+      google.protobuf.Timestamp from = 1;
+      google.protobuf.Timestamp to = 2;
+    }
+    Date date = 1;
+    repeated DogAction actions = 2;
+  }
+  Filter filter = 1;
+}
+
+message StatusListReply {
+  message Action {
+    google.protobuf.Timestamp date = 1 [json_name = "date"];
+    DogAction action = 2 [json_name = "action"];
+  }
+
+  repeated Action result = 1 [json_name = "result"];
 }

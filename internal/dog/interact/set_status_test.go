@@ -14,12 +14,12 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func TestImplementation_SetWalk(t *testing.T) {
+func TestImplementation_SetStatus(t *testing.T) {
 	mc := minimock.NewController(t)
 
 	type args struct {
 		ctx context.Context
-		in  *desc.SetWalkRequest
+		in  *desc.SetStatusRequest
 	}
 	tests := []struct {
 		name string
@@ -27,7 +27,7 @@ func TestImplementation_SetWalk(t *testing.T) {
 
 		args func(t *testing.T) args
 
-		want       *desc.SetWalkReply
+		want       *desc.SetStatusReply
 		wantErr    bool
 		inspectErr func(err error, t *testing.T)
 	}{
@@ -41,7 +41,7 @@ func TestImplementation_SetWalk(t *testing.T) {
 			args: func(t *testing.T) args {
 				return args{
 					context.Background(),
-					&desc.SetWalkRequest{
+					&desc.SetStatusRequest{
 						Action: desc.DogAction_UNKNOWN_DOG_ACTION,
 					},
 				}
@@ -65,13 +65,13 @@ func TestImplementation_SetWalk(t *testing.T) {
 			args: func(t *testing.T) args {
 				return args{
 					context.Background(),
-					&desc.SetWalkRequest{
+					&desc.SetStatusRequest{
 						Action: desc.DogAction_POPIS,
 					},
 				}
 			},
-			want: &desc.SetWalkReply{
-				Result: &desc.SetWalkReply_Result{
+			want: &desc.SetStatusReply{
+				Result: &desc.SetStatusReply_Result{
 					Created: true,
 				},
 			},
@@ -91,13 +91,13 @@ func TestImplementation_SetWalk(t *testing.T) {
 			args: func(t *testing.T) args {
 				return args{
 					context.Background(),
-					&desc.SetWalkRequest{
+					&desc.SetStatusRequest{
 						Action: desc.DogAction_WALK,
 					},
 				}
 			},
-			want: &desc.SetWalkReply{
-				Result: &desc.SetWalkReply_Result{
+			want: &desc.SetStatusReply{
+				Result: &desc.SetStatusReply_Result{
 					Created: true,
 				},
 			},
@@ -113,7 +113,7 @@ func TestImplementation_SetWalk(t *testing.T) {
 			tArgs := tt.args(t)
 
 			receiver := tt.init()
-			got, err := receiver.SetWalk(tArgs.ctx, tArgs.in)
+			got, err := receiver.SetStatus(tArgs.ctx, tArgs.in)
 
 			assert.Equal(t, got, tt.want)
 

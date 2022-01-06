@@ -18,7 +18,7 @@ goose -dir migrations create %migrations-name% sql
 # ToDo
 - генерацию бинарников в /bin
 - логированием обмазать
-- Сделать доку
+- Сделать доку https://blog.gendocu.com/posts/documenting-grpc/?utm_source=reddit&utm_medium=grpc&utm_campaign=golang&utm_id=article-comparision
 - Составить набор методов (пописы? прогулки? сколько и какой еды было куплено?)
 - CI/CD на свой сервак
 
