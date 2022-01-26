@@ -13,6 +13,7 @@ type Implementation struct {
 
 func New(db db.DB) *Implementation {
 	return &Implementation{
-		db: db,
+		db,
+		desc.UnimplementedDogServer{},
 	}
 }

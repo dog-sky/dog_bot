@@ -77,6 +77,8 @@ func (d *db) statusListQuery(ctx context.Context, filter *models.Filter) ([]*des
 		return res, err
 	}
 
+	defer rows.Close()
+
 	for rows.Next() {
 		var action string
 		var date time.Time

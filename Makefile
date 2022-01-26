@@ -2,6 +2,10 @@
 generate:
 	protoc --go_out=./pkg/dog --go_opt=paths=source_relative --go-grpc_out=./pkg/dog --go-grpc_opt=paths=source_relative ./api/dog.proto
 
+.PHONY: doc
+doc:
+	protoc --doc_out=./doc/dog --doc_opt=json,description.json -I ./api/ ./api/dog.proto
+
 .PHONY: test
 test:
 	go test -v -race -timeout 30s -cover ./...
