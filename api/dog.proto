@@ -12,6 +12,7 @@ service Dog {
   rpc StatusList (StatusListrequest) returns (StatusListReply);
 }
 
+// enum of actions for dog
 enum DogAction {
   UNKNOWN_DOG_ACTION = 0;
   POPIS = 1;
@@ -19,6 +20,7 @@ enum DogAction {
 }
 
 message SetStatusRequest {
+  // dog action
   DogAction action = 1 [json_name = "action"];
 }
 
@@ -32,10 +34,13 @@ message SetStatusReply {
 message StatusListrequest {
   message Filter {
     message Date {
+      // fitler date form
       google.protobuf.Timestamp from = 1;
+      // filter date to
       google.protobuf.Timestamp to = 2;
     }
     Date date = 1;
+    // dog actions
     repeated DogAction actions = 2;
   }
   Filter filter = 1;
